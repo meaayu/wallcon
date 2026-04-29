@@ -31,33 +31,6 @@
 
 ---
 
-## 🚀 Getting Started
-
-No installation, no build step, no server needed. Just open the file.
-
-```bash
-git clone https://github.com/meaayu/wallcon.git
-cd wallcon
-open wallcon.html   # macOS
-# or double-click wallcon.html in your file explorer
-```
-
-That's it. Everything runs locally in your browser.
-
----
-
-## 📁 Project Structure
-
-```
-wallcon/
-└── wallcon.html    # The entire app — HTML, CSS, and JS in one file
-└── README.md
-```
-
-Wallcon is intentionally a single self-contained file with no external dependencies beyond Google Fonts. This makes it trivial to share, host, or embed anywhere.
-
----
-
 ## 🖥 Browser Support
 
 Works in any modern browser with Canvas API support.
