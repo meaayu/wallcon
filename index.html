@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wallcon – Pixel Art & Wallpaper Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="toast">✓ Copied!</div>
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-icon">✦</div>
+    <div class="logo-text">
+      <h1>Wallcon</h1>
+      <span>pixel art & wallpaper studio</span>
+    </div>
+  </div>
+
+</header>
+
+<main>
+
+  <!-- ═══════════════ PIXEL ART CONVERTER PAGE ═══════════════ -->
+  <div class="page active" id="page-converter">
+    <div class="hero-text">
+      <span class="hero-badge">✨ Pixel Art Converter</span>
+      <h2>Turn photos into pixel art</h2>
+      <p>Upload any image and transform it into beautiful pixel art with curated color palettes.</p>
+    </div>
+
+    <!-- Upload -->
+    <div id="upload-zone">
+      <div id="uploader">
+        <div class="upload-icon-wrap">🖼</div>
+        <p>Drop your image here</p>
+        <small>or click to browse · PNG, JPG, WEBP, GIF</small>
+        <input type="file" id="file-input" accept="image/*" />
+      </div>
+    </div>
+
+    <!-- Workspace -->
+    <div id="workspace">
+      <!-- Left: Preview slider -->
+      <div>
+        <div id="preview-wrap">
+          <img id="original-img" src="" alt="Original" draggable="false" />
+          <div id="processed-wrap" style="clip-path: inset(0 0 0 50%)">
+            <img id="processed-img" src="" alt="Processed" draggable="false" />
+          </div>
+          <div id="slider-line" style="left:50%">
+            <div id="slider-handle">⇔</div>
+          </div>
+          <div class="preview-label" id="label-original">Original</div>
+          <div class="preview-label" id="label-pixel">Pixel Art</div>
+          <div id="dimensions-badge">— × —</div>
+          <div id="processing-overlay">
+            <div class="spinner"></div>
+            <p>Pixelating...</p>
+          </div>
+        </div>
+        <button id="change-btn">← Choose another image</button>
+      </div>
+
+      <!-- Right: Controls -->
+      <div>
+        <!-- Pixel size -->
+        <div class="card pixel-card">
+          <div class="card-title">
+            <span class="icon">⊞</span> Pixel Size
+            <span class="size-display" id="size-display">8px</span>
+          </div>
+          <input type="range" id="cell-size" min="2" max="48" step="1" value="8" />
+          <div class="range-labels"><span>Fine</span><span>Chunky</span></div>
+        </div>
+
+        <!-- Palette -->
+        <div class="card palette-card">
+          <div class="card-title"><span class="icon">🎨</span> Color Theme</div>
+          <div class="palette-grid" id="palette-grid"></div>
+        </div>
+
+        <!-- Export -->
+        <div class="card export-card">
+          <div class="card-title"><span class="icon">⬇</span> Export</div>
+          <div class="export-btns">
+            <button class="export-btn" id="btn-png" disabled>🖼 PNG</button>
+            <button class="export-btn" id="btn-svg" disabled>📄 SVG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ WALLPAPER GENERATOR PAGE ═══════════════ -->
+  <div class="page" id="page-wallpaper">
+    <div class="hero-text">
+      <span class="hero-badge" style="background: var(--accent-lavender);">🎨 Wallpaper Generator</span>
+      <h2>Create stunning wallpapers</h2>
+      <p>Pick a pattern, tweak the colors — your wallpaper updates instantly.</p>
+    </div>
+
+    <div class="wg-layout">
+      <!-- Preview column — left on desktop, top on mobile -->
+      <div class="wg-preview-col">
+        <div class="wg-preview-wrap" id="wg-preview-wrap">
+          <div class="wg-placeholder" id="wg-placeholder">
+            <span class="big-icon">✦</span>
+            <p>Pick a pattern to preview</p>
+            <small>Changes apply instantly</small>
+          </div>
+          <canvas id="wg-canvas" style="display:none;"></canvas>
+          <!-- Overlay download buttons -->
+          <div class="wg-canvas-overlay" id="wg-canvas-overlay" style="display:none;">
+            <button class="wg-ol-btn" id="wg-dl-png">⬇ PNG</button>
+            <button class="wg-ol-btn" id="wg-dl-jpg">⬇ JPG</button>
+            <button class="wg-ol-btn wg-ol-copy" id="wg-dl-copy">⎘ Copy</button>
+          </div>
+        </div>
+        <div class="wg-preview-meta" id="wg-preview-meta"></div>
+      </div>
+
+      <!-- Controls column — right on desktop, below on mobile -->
+      <div class="wg-controls">
+
+        <!-- Top action bar -->
+        <div class="wg-action-bar">
+          <button class="generate-btn" id="wg-generate-btn">✦ Generate</button>
+          <button class="randomize-btn-sm" id="wg-randomize-btn">🎲</button>
+        </div>
+
+        <!-- Pattern type -->
+        <div class="wg-section">
+          <div class="wg-section-label">◈ Pattern</div>
+          <div class="pattern-grid" id="pattern-grid">
+            <button class="pattern-btn active" data-pattern="geometric"><span class="pat-icon">◆</span>Geometric</button>
+            <button class="pattern-btn" data-pattern="waves"><span class="pat-icon">〰</span>Waves</button>
+            <button class="pattern-btn" data-pattern="dots"><span class="pat-icon">⦿</span>Dots</button>
+            <button class="pattern-btn" data-pattern="stripes"><span class="pat-icon">≡</span>Stripes</button>
+            <button class="pattern-btn" data-pattern="mosaic"><span class="pat-icon">⊞</span>Mosaic</button>
+            <button class="pattern-btn" data-pattern="noise"><span class="pat-icon">✦</span>Starburst</button>
+            <button class="pattern-btn" data-pattern="hexagons"><span class="pat-icon">⬡</span>Hexagons</button>
+            <button class="pattern-btn" data-pattern="triangles"><span class="pat-icon">▲</span>Triangles</button>
+            <button class="pattern-btn" data-pattern="gradient"><span class="pat-icon">◑</span>Gradient</button>
+            <button class="pattern-btn" data-pattern="chevron"><span class="pat-icon">⌃</span>Chevron</button>
+            <button class="pattern-btn" data-pattern="mandala"><span class="pat-icon">✿</span>Mandala</button>
+            <button class="pattern-btn" data-pattern="isometric"><span class="pat-icon">⬡</span>Isometric</button>
+            <button class="pattern-btn" data-pattern="circuit"><span class="pat-icon">⊕</span>Circuit</button>
+            <button class="pattern-btn" data-pattern="aurora"><span class="pat-icon">◈</span>Aurora</button>
+            <button class="pattern-btn" data-pattern="confetti"><span class="pat-icon">✧</span>Confetti</button>
+          </div>
+        </div>
+
+        <!-- Colors accordion -->
+        <div class="wg-accordion" id="acc-colors">
+          <button class="wg-acc-header" onclick="toggleAcc('acc-colors')">
+            <span>🎨 Colors</span>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="wg-acc-body">
+            <div id="color-preview-strip"></div>
+            <div class="custom-color-slots" id="custom-color-slots">
+              <div class="color-slot" data-index="0">
+                <input type="color" class="slot-picker" value="#ff6b9d" id="wg-color1" />
+                <div class="slot-info">
+                  <span class="slot-label">Color 1</span>
+                  <input type="text" class="slot-hex" value="#ff6b9d" maxlength="7" spellcheck="false" />
+                </div>
+                <button class="slot-copy" title="Copy hex">⎘</button>
+              </div>
+              <div class="color-slot" data-index="1">
+                <input type="color" class="slot-picker" value="#ffe547" id="wg-color2" />
+                <div class="slot-info">
+                  <span class="slot-label">Color 2</span>
+                  <input type="text" class="slot-hex" value="#ffe547" maxlength="7" spellcheck="false" />
+                </div>
+                <button class="slot-copy" title="Copy hex">⎘</button>
+              </div>
+              <div class="color-slot" data-index="2">
+                <input type="color" class="slot-picker" value="#5effc8" id="wg-color3" />
+                <div class="slot-info">
+                  <span class="slot-label">Color 3</span>
+                  <input type="text" class="slot-hex" value="#5effc8" maxlength="7" spellcheck="false" />
+                </div>
+                <button class="slot-copy" title="Copy hex">⎘</button>
+              </div>
+              <div class="color-slot bg-slot" data-index="3">
+                <input type="color" class="slot-picker" value="#c9b8ff" id="wg-color4" />
+                <div class="slot-info">
+                  <span class="slot-label">Background</span>
+                  <input type="text" class="slot-hex" value="#c9b8ff" maxlength="7" spellcheck="false" />
+                </div>
+                <button class="slot-copy" title="Copy hex">⎘</button>
+              </div>
+            </div>
+            <div class="harmony-section">
+              <div class="wg-sub-label">⚡ Harmony</div>
+              <div class="harmony-row">
+                <input type="color" id="harmony-base" value="#ff6b9d" title="Base color" />
+                <div class="harmony-btns">
+                  <button class="harmony-btn" data-mode="complementary">Complement</button>
+                  <button class="harmony-btn" data-mode="triadic">Triadic</button>
+                  <button class="harmony-btn" data-mode="analogous">Analogous</button>
+                  <button class="harmony-btn" data-mode="split">Split</button>
+                  <button class="harmony-btn" data-mode="monochrome">Mono</button>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <div class="wg-sub-label">🎯 Quick Palettes</div>
+              <div class="grad-presets" id="quick-palettes"></div>
+            </div>
+            <div style="margin-top:10px;display:none;" id="recent-section">
+              <div class="wg-sub-label">🕐 Recent Colors</div>
+              <div class="recent-colors" id="recent-colors"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Size accordion -->
+        <div class="wg-accordion" id="acc-size">
+          <button class="wg-acc-header" onclick="toggleAcc('acc-size')">
+            <span>📐 Output Size</span>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="wg-acc-body">
+            <div class="size-presets" id="size-presets">
+              <button class="size-preset-btn active" data-w="1920" data-h="1080">1920×1080</button>
+              <button class="size-preset-btn" data-w="2560" data-h="1440">2560×1440</button>
+              <button class="size-preset-btn" data-w="3840" data-h="2160">4K</button>
+              <button class="size-preset-btn" data-w="1080" data-h="1920">Mobile</button>
+              <button class="size-preset-btn" data-w="1280" data-h="800">Laptop</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Params accordion -->
+        <div class="wg-accordion" id="acc-params">
+          <button class="wg-acc-header" onclick="toggleAcc('acc-params')">
+            <span>⚙ Parameters</span>
+            <span class="acc-arrow">▾</span>
+          </button>
+          <div class="wg-acc-body">
+            <div class="param-row">
+              <span class="param-label">Scale</span>
+              <input type="range" id="wg-scale" min="10" max="200" value="60" style="flex:1" />
+              <span class="param-val" id="wg-scale-val">60</span>
+            </div>
+            <div class="param-row">
+              <span class="param-label">Complexity</span>
+              <input type="range" id="wg-complexity" min="1" max="10" value="5" style="flex:1" />
+              <span class="param-val" id="wg-complexity-val">5</span>
+            </div>
+            <div class="param-row">
+              <span class="param-label">Rotation</span>
+              <input type="range" id="wg-rotation" min="0" max="360" value="45" style="flex:1" />
+              <span class="param-val" id="wg-rotation-val">45°</span>
+            </div>
+            <div class="param-row">
+              <span class="param-label">Opacity</span>
+              <input type="range" id="wg-opacity" min="10" max="100" value="100" style="flex:1" />
+              <span class="param-val" id="wg-opacity-val">100%</span>
+            </div>
+            <div class="wg-toggles">
+              <label class="wg-toggle-chip">
+                <input type="checkbox" id="wg-shadow" checked />
+                <span>Shadows</span>
+              </label>
+              <label class="wg-toggle-chip">
+                <input type="checkbox" id="wg-outline" />
+                <span>Outlines</span>
+              </label>
+              <label class="wg-toggle-chip">
+                <input type="checkbox" id="wg-vignette" />
+                <span>Vignette</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+
+
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bottom-tab active" data-page="converter">
+    <span class="bottom-tab-icon">🖼</span>
+    <span class="bottom-tab-label">Pixel Art</span>
+  </button>
+  <button class="bottom-tab" data-page="wallpaper">
+    <span class="bottom-tab-icon">🎨</span>
+    <span class="bottom-tab-label">Wallpaper Gen</span>
+  </button>
+  <a href="https://github.com/meaayu" target="_blank" rel="noopener noreferrer" class="dock-credit">by aayu</a>
+</nav>
+
+<script src="script.js"></script>
+</html>
